@@ -8,6 +8,7 @@ import Link from 'next/link';
 interface NavBarProps {
   role: 'admin' | 'retailer';
   pendingCount?: number;
+  userName?: string;
 }
 
 export default function NavBar({ role, pendingCount = 0 }: NavBarProps) {
