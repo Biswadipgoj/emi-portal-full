@@ -9,14 +9,15 @@ import toast from 'react-hot-toast';
 interface Props {
   emis: EMISchedule[];
   isAdmin?: boolean;
-  onRefresh?: () => void;
+  nextUnpaidNo?: number;
+  onRefresh?: () => void | Promise<void>;
 }
 
 function fmt(n: number) {
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(n);
 }
 
-export default function EMIScheduleTable({ emis, isAdmin, onRefresh }: Props) {
+export default function EMIScheduleTable({ emis, isAdmin, nextUnpaidNo, onRefresh }: Props) {
   const supabase = createClient();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [fineOverride, setFineOverride] = useState('');
@@ -70,8 +71,9 @@ export default function EMIScheduleTable({ emis, isAdmin, onRefresh }: Props) {
             {emis.map(emi => {
               const isOverdue = emi.status === 'UNPAID' && new Date(emi.due_date) < new Date();
               const editing = editingId === emi.id;
+              const isNextUnpaid = nextUnpaidNo !== undefined && emi.emi_no === nextUnpaidNo;
               return (
-                <tr key={emi.id} className={isOverdue ? 'bg-danger-light/30' : ''}>
+                <tr key={emi.id} className={isOverdue ? 'bg-danger-light/30' : isNextUnpaid ? 'bg-brand-500/5' : ''}>
                   <td className="font-semibold text-ink">#{emi.emi_no}</td>
                   <td>
                     {editing ? (

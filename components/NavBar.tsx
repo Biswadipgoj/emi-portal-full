@@ -10,6 +10,7 @@ interface NavBarProps {
   /** Optional label (e.g. retailer name or "TELEPOINT") */
   userName?: string;
   pendingCount?: number;
+  userName?: string;
 }
 
 export default function NavBar({ role, pendingCount = 0, userName }: NavBarProps) {
